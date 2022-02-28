@@ -18,6 +18,7 @@
                 height:100vh;
                 overflow:hidden;
                 background:linear-gradient(120deg, rgba(255,255,0,.8), rgba(255,50,10,1) 70.71%);
+            
             }
             .wrapper{
                 width:100%;
@@ -28,7 +29,6 @@
             {
                 position:absolute;
                 inset:0px;
-                z-index:-20;
             }
             .container
             {
@@ -38,6 +38,8 @@
                 display:inline-flex;
                 flex-direction:column;
                 overflow:visible;
+                position:relative;
+                z-index: 10;
             }
             header
             {
@@ -53,7 +55,7 @@
                 padding: 2vh 4vw;
                 border-radius:50px;
                 border:none;
-                font-size:2vw;
+                font-size:2vw;]
                 font-weight:700;
                 margin:25px 0px;
                 width:fit-content;
@@ -66,6 +68,23 @@
             {
                 transform:scale(1.1);
                 background-color:lavender;
+            }
+
+            @media screen and (max-width: 900px) {
+            
+                header
+                {
+                    font-size:2.5em;
+                }
+                button
+                {
+                    font-size:1.25em;
+                }
+                .container
+                {
+                    width:70vw;
+                }
+                
             }
    
                 
@@ -83,7 +102,7 @@
                     GET STARTED
                 </button>   
             </div>
-            <div class="bg">
+            <div class="bg" id="bg">
             </div>
         </div>
         <?php   
@@ -91,6 +110,13 @@
             //create circles of random sizes for each session visit
             //they have absolute position and have random distances
             //away from top and right
+            //reset session count to 0
+            $reset=htmlspecialchars($_GET["reset"]);
+            echo $reset;
+            if($reset == "1"){
+                $_SESSION['count']=0;
+                
+            }
             for($x = 0; $x <= $_SESSION['count']; $x++)
             {
                 
@@ -107,7 +133,7 @@
                 right:${ran2}vw;
                 border-radius:50%;
                 position:absolute;
-                z-index:-10;
+                z-index:0;
                 '>";
                 echo "</div>";
             }
@@ -121,13 +147,8 @@
             {  
             $_SESSION['count'] = 0;  
             }
-            //reset session count to 0
-            $reset=htmlspecialchars($_GET["reset"]);
-            echo $reset;
-            if($reset == "1"){
-                $_SESSION['count']=0;
-            }
-             
+            
+            
         
         ?>  
     </body>
@@ -135,8 +156,6 @@
     <script >
         //set 6 variables between 0 and 255
         //create gradient using variables
-        function rGradient()
-        {
         const r1 = Math.round(Math.random() * 255);
         const g1 = Math.round(Math.random() * 255);
         const b1 = Math.round(Math.random() * 255);
@@ -144,6 +163,39 @@
         const g2 = Math.round(Math.random() * 255);
         const b2 = Math.round(Math.random() * 255);
         document.body.style.background = `linear-gradient(120deg, rgba(${r1},${g1},${b1},1), rgba(${r2},${g2},${b2},1))`;
+
+        //fade function, sets the opacity .1 lower every tenth of a second
+        function fadeOutEffect() 
+        {
+            var fadeTarget = document.getElementById("bg");
+            var fadeEffect = setInterval(function () {
+            if (!fadeTarget.style.opacity) 
+            {
+                fadeTarget.style.opacity = 1;
+            }
+            if (fadeTarget.style.opacity > 0) 
+            {
+                fadeTarget.style.opacity -= 0.1;
+            } else 
+            {
+                clearInterval(fadeEffect);
+            }
+            }, 100);
+        }
+
+        function rGradient()
+        {
+        var body = document.getElementById("body");
+        document.getElementById("bg").style.cssText=body.style.cssText;
+        fadeOutEffect();
+        const r1 = Math.round(Math.random() * 255);
+        const g1 = Math.round(Math.random() * 255);
+        const b1 = Math.round(Math.random() * 255);
+        const r2 = Math.round(Math.random() * 255);
+        const g2 = Math.round(Math.random() * 255);
+        const b2 = Math.round(Math.random() * 255);
+        document.body.style.background = `linear-gradient(120deg, rgba(${r1},${g1},${b1},1), rgba(${r2},${g2},${b2},1))`;
+        
         }
         
 
